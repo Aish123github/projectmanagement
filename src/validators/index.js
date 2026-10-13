@@ -1,7 +1,7 @@
 // in the postman error comes from a variety of places body, params etc
 // we will care for body now 
 import { body } from "express-validator";
-
+import {AvailableUserRole} from "../utils/constants.js"
 // working on user registration for now 
 const userRegistrationValidator = () => {
     return [
@@ -60,10 +60,34 @@ const userResetForgotPasswordValidator =() =>
     {
         return [body("newPassword").notEmpty().withMessage("password is required ")]
     }
+const createProjectValidator = () => {
+  return [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("description").optional(),
+  ];
+};
 
+const addMembertoProjectValidator = () => {
+  return [
+    body("email")
+      .trim()
+      .notEmpty()
+      .withMessage("Email is required")
+      .isEmail()
+      .withMessage("Email is invalid"),
+    body("role")
+      .notEmpty()
+      .withMessage("Role is required")
+      .isIn(AvailableUserRole)
+      .withMessage("Role is invalid"),
+  ];
+};
 export { userRegistrationValidator,
      userLoginValidator,
     userChangeCurrentPasswordValidator,
     userForgotPasswordValidator,
-    userResetForgotPasswordValidator
+    userResetForgotPasswordValidator,
+   createProjectValidator ,
+   addMembertoProjectValidator
+
  };
